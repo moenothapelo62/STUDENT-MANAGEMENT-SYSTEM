@@ -1,55 +1,25 @@
-/**
- * StudentDashboard Component
- *
- * Displays student records in a structured table with animated rows.
- * Demonstrates: React props, array .map() iteration, AnimatePresence
- * for enter/exit animations, and conditional rendering.
- */
 import { motion, AnimatePresence } from "motion/react";
 import { LuPencil, LuTrash2, LuSearchX } from "react-icons/lu";
 
-/**
- * rowVariants — Animation variants for table row enter/exit.
- * - hidden: starts invisible and offset to the left
- * - visible: fully opaque at normal position
- * - exit: fades out and slides right
- */
+// How each table row moves in and out
 const rowVariants = {
   hidden: { opacity: 0, x: -30 },
   visible: { opacity: 1, x: 0 },
   exit: { opacity: 0, x: 30 },
 };
 
-/**
- * getInitials — Extracts initials from a full name string.
- *
- * STRING METHODS:
- * - .trim() removes leading/trailing whitespace
- * - .split(/\s+/) splits on one or more spaces (handles double spaces)
- * - .toUpperCase() converts first character to uppercase
- *
- * CONDITIONAL: Returns "?" if name is empty/null.
- * Loops at most 2 times (first name + last name initials).
- *
- * @param {string} name — Full name string
- * @returns {string} — 1-2 character initials
- */
+// I take the first letters of the name for the circle, e.g. "Thabo Molefe" -> "TM"
 function getInitials(name) {
-  if (!name) return "?"; // Guard clause for null/undefined
-  // Split by one or more whitespace characters, take first 2 words
+  if (!name) return "?";
   const parts = name.trim().split(/\s+/);
   let initials = "";
-  // Loop: extract first character of each word, up to 2 words
   for (let i = 0; i < parts.length && i < 2; i++) {
     if (parts[i]) initials += parts[i][0].toUpperCase();
   }
   return initials;
 }
 
-/**
- * avatarShades — Array of RGBA color strings for avatar backgrounds.
- * Different shades of white at varying opacity for visual variety.
- */
+// Just 4 background colours for the circles
 const avatarShades = [
   "rgba(255,255,255,0.12)",
   "rgba(255,255,255,0.18)",
@@ -57,47 +27,25 @@ const avatarShades = [
   "rgba(255,255,255,0.30)",
 ];
 
-/**
- * getAvatarColor — Deterministically picks an avatar color based on the name.
- * Uses a simple hash function so the same name always gets the same color.
- *
- * @param {string} name — Student's full name
- * @returns {string} — RGBA color string
- */
 function getAvatarColor(name) {
   let hash = 0;
-  // Simple hash: sum character codes with bit shifting
   for (let i = 0; i < name.length; i++) {
     hash = name.charCodeAt(i) + ((hash << 5) - hash);
   }
-  // Modulo ensures index is within array bounds
   return avatarShades[Math.abs(hash) % avatarShades.length];
 }
 
-/**
- * StudentDashboard — Main table component.
- *
- * PROPS (Object):
- * - students: Array<Object> — filtered and sorted student objects
- * - onEditClick: function — callback when edit button is clicked
- * - onDeleteClick: function — callback when delete button is clicked
- *
- * @param {Object} props
- * @returns {JSX.Element}
- */
+// students = my filtered list, the two functions handle edit and delete clicks.
 function StudentDashboard({ students, onEditClick, onDeleteClick }) {
   return (
     <div className="dashboard" id="students">
-      {/* Section Header */}
       <div className="dashboard-header">
         <h2 className="section-title">Student Records</h2>
-        {/* CONDITIONAL: "student" vs "students" based on count */}
         <p className="section-subtitle">
           Showing {students.length} student{students.length !== 1 ? "s" : ""}
         </p>
       </div>
 
-      {/* Glass Container with Table */}
       <div className="table-container glass">
         <table className="students-table">
           <thead>
@@ -112,13 +60,7 @@ function StudentDashboard({ students, onEditClick, onDeleteClick }) {
             </tr>
           </thead>
           <tbody>
-            {/*
-              AnimatePresence + .map() — renders each student as a table row.
-              mode="popLayout" removes exiting rows from layout flow immediately,
-              so remaining rows animate to their new positions smoothly.
-              key={student.id} is REQUIRED — React uses it to track which
-              rows were added/removed for correct exit animations.
-            */}
+            {/* map over the array to make one row per student */}
             <AnimatePresence mode="popLayout">
               {students.map((student) => (
                 <motion.tr
@@ -130,10 +72,7 @@ function StudentDashboard({ students, onEditClick, onDeleteClick }) {
                   layout
                   transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
                 >
-                  {/* ID column — displays with # prefix */}
                   <td className="cell-id">{student.id}</td>
-
-                  {/* Name column — avatar circle with initials + full name */}
                   <td>
                     <div className="name-cell">
                       <span
@@ -145,13 +84,9 @@ function StudentDashboard({ students, onEditClick, onDeleteClick }) {
                       <span className="student-name">{student.fullName}</span>
                     </div>
                   </td>
-
-                  {/* Age, Email, Course columns */}
                   <td>{student.age}</td>
                   <td className="cell-email">{student.email}</td>
                   <td className="cell-course">{student.course}</td>
-
-                  {/* Status — CONDITIONAL: enrolled vs not-enrolled styling */}
                   <td>
                     <span
                       className={`status-badge ${
@@ -161,8 +96,6 @@ function StudentDashboard({ students, onEditClick, onDeleteClick }) {
                       {student.isEnrolled ? "Enrolled" : "Not Enrolled"}
                     </span>
                   </td>
-
-                  {/* Actions — Edit and Delete buttons */}
                   <td>
                     <div className="actions">
                       <motion.button
@@ -191,7 +124,7 @@ function StudentDashboard({ students, onEditClick, onDeleteClick }) {
           </tbody>
         </table>
 
-        {/* EMPTY STATE — CONDITIONAL: shown only when no students match */}
+        {/* Message when the search finds nothing */}
         {students.length === 0 && (
           <motion.div
             className="empty-state"

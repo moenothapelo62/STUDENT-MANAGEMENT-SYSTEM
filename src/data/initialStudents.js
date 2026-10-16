@@ -1,48 +1,37 @@
-/**
- * Initial Student Data
- *
- * DATA TYPES USED:
- * - Object: Each student is an object (non-primitive type) with key-value pairs
- * - number: id and age use the numeric data type for arithmetic operations
- * - string: fullName, email, and course use the string data type for text
- * - boolean: isEnrolled uses true/false for binary enrollment status
- * - Array: initialStudents is an array (non-primitive) holding all student objects
- *
- * WHY THESE TYPES:
- * - id is a number because we use Math.max() for ID generation
- * - age is a number because we sort numerically and calculate averages
- * - isEnrolled is a boolean because it's a binary state (true/false)
- * - Array is used because it allows .filter(), .map(), .sort() methods
- */
-
-// Using const because the array reference should never be reassigned.
-// The contents can still be mutated (push, splice), but we use immutable
-// patterns (spread operator, filter, map) in the hook instead.
+// Create an array (list) called "initialStudents" that holds student objects
 const initialStudents = [
+  
+ 
+  // Each object represents ONE student with their details
   {
-    id: 1,                    // number — unique identifier for each student
-    fullName: "Thabo Molefe",  // string — student's full name
-    age: 21,                   // number — used for sorting and average calculation
-    email: "thabo.molefe@example.com",  // string — used for search filtering
-    course: "Diploma in Information Technology",  // string — used for sorting
-    isEnrolled: true,          // boolean — true = enrolled, false = not enrolled
+    id: 1,                                              // Unique number to identify this student
+    fullName: "Thabo Molefe",                           // Student's full name (text/string)
+    age: 21,                                            // Student's age (number)
+    email: "thabomolefe@gmail.com",                     // Student's email address
+    course: "Diploma in Information Technology",        // Course the student is studying
+    isEnrolled: true,                                   // true = student is currently enrolled
   },
+
+  // Second student object
   {
     id: 2,
     fullName: "Lerato Nkosi",
     age: 19,
-    email: "lerato.nkosi@example.com",
+    email: "leratonkosi@gmail.com",
     course: "Diploma in Business Information Technology",
     isEnrolled: true,
   },
+
+  // Third student object
   {
     id: 3,
     fullName: "Neo Mokoena",
     age: 22,
-    email: "neo.mokoena@example.com",
+    email: "neomokoena@gmail.com",
     course: "Diploma in Information Technology",
-    isEnrolled: false,
+    isEnrolled: false,                                  // false = student is NOT enrolled
   },
 ];
 
+// "export default" means this is the main thing being shared from this file
 export default initialStudents;

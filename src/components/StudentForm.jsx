@@ -1,173 +1,100 @@
-/**
- * StudentForm Component
- *
- * A reusable form modal for adding and editing student records.
- * Demonstrates: React state, event handling, form validation,
- * controlled inputs, and conditional rendering.
- */
+
+  //Student form for Add and Edit.
+ //I use strings for name/email/course, number for age, boolean for enrolled.
+ 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { LuUser, LuCalendar, LuMail, LuBookOpen } from "react-icons/lu";
 
-/**
- * StudentForm — Form component for adding/editing a student.
- *
- * FUNCTION PARAMS (destructured from props Object):
- * - initialData: Object | null — student data for edit mode, null for add mode
- * - onSubmit: function — callback with form data when valid
- * - onCancel: function — callback to close without saving
- *
- * @param {Object} props
- * @returns {JSX.Element}
- */
+// My form for adding a new student and editing an old one.
 function StudentForm({ initialData, onSubmit, onCancel }) {
-  // OBJECT: Default empty form values
-  // DATA TYPES: strings (fullName, age, email, course) + boolean (isEnrolled)
-  // Using const — we never reassign emptyForm, only read from it
+  // Empty boxes when adding. age starts as text because inputs give text.
+  // isEnrolled is true/false for the switch.
   const emptyForm = {
-    fullName: "",   // string — starts empty, filled by user input
-    age: "",        // string initially (input type=string), converted to number on submit
-    email: "",      // string — validated with regex
-    course: "",     // string — required field
-    isEnrolled: false, // boolean — toggle switch, default not enrolled
+    fullName: "",
+    age: "",
+    email: "",
+    course: "",
+    isEnrolled: false,
   };
 
-  // STATE: formData holds the current values of all form fields
-  // Initialized with emptyForm for add mode, or student data for edit mode
+  // What I typed + my error messages
   const [formData, setFormData] = useState(emptyForm);
-
-  // STATE: errors is an object with keys matching field names
-  // Each value is a string error message (or undefined if no error)
   const [errors, setErrors] = useState({});
 
-  /**
-   * useEffect — Resets form when initialData changes (add → edit or edit → edit different).
-   * If initialData exists (edit mode), populate form with student data.
-   * Otherwise (add mode), reset to empty form.
-   */
+  // When I click Edit, fill the boxes with that student
   useEffect(() => {
     if (initialData) {
-      setFormData(initialData); // Populate with existing student data
+      setFormData(initialData);
     } else {
-      setFormData(emptyForm);   // Reset to empty for new student
+      setFormData(emptyForm);
     }
   }, [initialData]);
 
-  /**
-   * handleChange — Updates form data when any input changes.
-   *
-   * EVENT HANDLING: e.target contains name, value, type, and checked properties.
-   *
-   * CONDITIONAL: Checkboxes store boolean (checked), other inputs store string (value).
-   *
-   * IMMUTABLE UPDATE: Spread operator creates a new object to avoid direct mutation.
-   *
-   * CLEAR ERROR: When user fixes a field, remove its error message immediately.
-   *
-   * @param {Event} e — The change event from the input element
-   */
+  // Runs every time I type in a box
   function handleChange(e) {
-    // Destructure properties from the event target
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
-      ...prev,                              // Keep all other fields unchanged
-      [name]: type === "checkbox" ? checked : value, // Update only the changed field
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
     }));
-    // CONDITIONAL: Clear error for this field if it exists
+    // Remove the error for this box once I start fixing it
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: undefined }));
     }
   }
 
-  /**
-   * validate — Checks all form fields for errors.
-   *
-   * RETURNS: An object where keys are field names and values are error strings.
-   * Empty object {} means no errors (form is valid).
-   *
-   * VALIDATION RULES:
-   * - fullName: required (must not be empty after trimming whitespace)
-   * - age: required, must be a positive number (> 0)
-   * - email: required, must match email format using regex
-   * - course: required (must not be empty)
-   *
-   * @returns {Object} — { fieldName: "error message", ... } or {} if valid
-   */
+  // I check everything here before saving
   function validate() {
-    const newErrors = {}; // Start with empty object — no errors yet
+    const newErrors = {};
 
-    // FULL NAME: Check if empty after removing whitespace
-    // .trim() removes leading/trailing spaces; empty string is falsy
     if (!formData.fullName.trim()) {
       newErrors.fullName = "Full name is required";
     }
 
-    // AGE: Two checks — first if empty, then if not a positive number
-    // isNaN() checks if value is "Not a Number"
-    // Number() converts string to number for comparison
+    // Age must be a number between 16 and 100 for college
     if (!formData.age) {
       newErrors.age = "Age is required";
-    } else if (isNaN(formData.age) || Number(formData.age) <= 0) {
-      newErrors.age = "Age must be a positive number";
+    } else if (isNaN(formData.age) || Number(formData.age) < 16 || Number(formData.age) > 100) {
+      newErrors.age = "Age must be between 16 and 100";
     }
 
-    // EMAIL: Two checks — first if empty, then regex pattern match
-    // Regex \S+@\S+\.\S+ means: one or more non-space chars, @, non-space, dot, non-space
+    // Email must have @ and a dot
     if (!formData.email.trim()) {
       newErrors.email = "Email is required";
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = "Please enter a valid email";
     }
 
-    // COURSE: Required field check
     if (!formData.course.trim()) {
       newErrors.course = "Course is required";
     }
 
-    return newErrors; // Return the errors object (may be empty)
+    return newErrors;
   }
 
-  /**
-   * handleSubmit — Processes form submission.
-   *
-   * EVENT HANDLING: preventDefault() stops the browser's default form submission
-   * (which would reload the page). We handle everything in React instead.
-   *
-   * CONDITIONAL: If validation fails, show errors and stop.
-   * If valid, convert age from string to number and call onSubmit.
-   *
-   * TYPE CONVERSION: age is stored as string in the form (HTML input),
-   * but needs to be a number in the data model for sorting/averaging.
-   *
-   * @param {Event} e — The submit event
-   */
+  // When I press Save: stop reload, check errors, then send up with age as number
   function handleSubmit(e) {
-    e.preventDefault(); // Prevent page reload
+    e.preventDefault();
     const validationErrors = validate();
 
-    // CONDITIONAL: If errors object has any keys, form is invalid
-    // .length > 0 means at least one field failed validation
     if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors); // Show error messages under each field
-      return; // Stop — do not submit
+      setErrors(validationErrors);
+      return;
     }
 
-    // Form is valid — clear errors and submit data
     setErrors({});
     onSubmit({
-      ...formData,                      // Spread all form fields
-      age: Number(formData.age),        // Convert age from string to number
+      ...formData,
+      age: Number(formData.age),
     });
   }
 
   return (
     <form className="student-form" onSubmit={handleSubmit} noValidate>
-      {/* 
-        noValidate disables browser's default validation messages.
-        We use our own validate() function for consistent, styled error messages.
-      */}
+      {/* noValidate turns off the browser messages, I show my own below */}
 
-      {/* FULL NAME FIELD */}
+      {/* Name box */}
       <div className="form-group">
         <label htmlFor="fullName">Full Name</label>
         <div className="form-input-wrapper">
@@ -181,7 +108,7 @@ function StudentForm({ initialData, onSubmit, onCancel }) {
             placeholder="Enter full name"
           />
         </div>
-        {/* CONDITIONAL RENDERING: Only show error if it exists */}
+        {/* Show the error only if there is one */}
         <AnimatePresence>
           {errors.fullName && (
             <motion.span
@@ -196,7 +123,7 @@ function StudentForm({ initialData, onSubmit, onCancel }) {
         </AnimatePresence>
       </div>
 
-      {/* AGE FIELD */}
+      {/* Age box */}
       <div className="form-group">
         <label htmlFor="age">Age</label>
         <div className="form-input-wrapper">
@@ -225,7 +152,7 @@ function StudentForm({ initialData, onSubmit, onCancel }) {
         </AnimatePresence>
       </div>
 
-      {/* EMAIL FIELD */}
+      {/* Email box */}
       <div className="form-group">
         <label htmlFor="email">Email</label>
         <div className="form-input-wrapper">
@@ -253,7 +180,7 @@ function StudentForm({ initialData, onSubmit, onCancel }) {
         </AnimatePresence>
       </div>
 
-      {/* COURSE FIELD */}
+      {/* Course box */}
       <div className="form-group">
         <label htmlFor="course">Course</label>
         <div className="form-input-wrapper">
@@ -281,14 +208,13 @@ function StudentForm({ initialData, onSubmit, onCancel }) {
         </AnimatePresence>
       </div>
 
-      {/* ENROLLMENT STATUS — Custom toggle switch */}
+      {/* Enrolled switch */}
       <div className="form-group">
         <label>Enrollment Status</label>
         <button
           type="button"
           className={`toggle ${formData.isEnrolled ? "active" : ""}`}
           onClick={() =>
-            // IMMUTABLE UPDATE: Toggle boolean, create new object
             setFormData((prev) => ({ ...prev, isEnrolled: !prev.isEnrolled }))
           }
           role="switch"
@@ -297,12 +223,11 @@ function StudentForm({ initialData, onSubmit, onCancel }) {
           <span className="toggle-slider" />
         </button>
         <span className="toggle-label">
-          {/* CONDITIONAL: Show text based on boolean value */}
           {formData.isEnrolled ? "Enrolled" : "Not Enrolled"}
         </span>
       </div>
 
-      {/* FORM ACTION BUTTONS */}
+      {/* Cancel and Save buttons */}
       <div className="form-actions">
         <motion.button
           type="button"
@@ -319,7 +244,7 @@ function StudentForm({ initialData, onSubmit, onCancel }) {
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
         >
-          {/* CONDITIONAL TEXT: Different label for add vs edit mode */}
+          {/* The button says Update when editing, Save when adding */}
           {initialData ? "Update Student" : "Save Student"}
         </motion.button>
       </div>

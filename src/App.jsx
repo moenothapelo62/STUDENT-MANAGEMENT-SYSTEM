@@ -1,44 +1,20 @@
-/**
- * App Component — Root component of the Student Management System
- *
- * REACT COMPONENT STRUCTURE:
- * - App: Root component, composes all child components
- * - Navbar: Fixed header with navigation and Add button
- * - StatsCards: Grid of animated statistic cards
- * - SearchFilter: Search input + filter/sort dropdowns
- * - StudentDashboard: Table of student records
- * - Modal: Reusable modal wrapper for add/edit forms
- * - StudentForm: Form for adding/editing students
- * - DeleteConfirmModal: Confirmation dialog for deletion
- *
- * STATE MANAGEMENT:
- * All student state is managed in the useStudents custom hook.
- * App receives state and handlers via destructuring.
- * Child components receive data via props.
- *
- * EVENT FLOW:
- * 1. User clicks "Add Student" → setIsAddModalOpen(true)
- * 2. Modal opens with StudentForm inside
- * 3. User fills form and submits → handleAddStudent(data)
- * 4. Hook updates students state → table re-renders immediately
- * 5. Modal closes automatically
- */
-import { motion } from "motion/react";
-import AnimatedBackground from "./components/AnimatedBackground";
-import Navbar from "./components/Navbar";
-import StatsCards from "./components/StatsCards";
-import SearchFilter from "./components/SearchFilter";
+import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "motion/react";
+import { LuMenu } from "react-icons/lu";
+// My components
+import AppBackground from "./components/AppBackground";
+import DashboardMenu from "./components/DashboardMenu";
+import DashboardOverview from "./components/DashboardOverview";
+import StudentStatsCards from "./components/StudentStatsCards";
+import StudentSearchFilter from "./components/StudentSearchFilter";
 import StudentDashboard from "./components/StudentDashboard";
-import Modal from "./components/Modal";
+import StudentModal from "./components/StudentModal";
 import StudentForm from "./components/StudentForm";
-import DeleteConfirmModal from "./components/DeleteConfirmModal";
+import DeleteStudentModal from "./components/DeleteStudentModal";
 import { useStudents } from "./hooks/useStudents";
 import "./App.css";
 
-/**
- * pageVariants — Framer Motion variants for the main content entrance.
- * Animates from invisible (opacity 0, offset down) to visible.
- */
+// Simple fade and slide for switching pages
 const pageVariants = {
   hidden: { opacity: 0, y: 20 },
   visible: {
@@ -48,87 +24,144 @@ const pageVariants = {
   },
 };
 
-/**
- * App — Root functional component.
- * Uses the useStudents hook for all student data and operations.
- *
- * @returns {JSX.Element}
- */
 function App() {
-  // DESTRUCTURING: Extract all state and functions from the hook.
-  // This object contains state values, setter functions, and CRUD handlers.
+  // Which menu page is showing: dashboard or students
+  const [activeView, setActiveView] = useState("dashboard");
+  // true = small icon menu, false = full menu
+  const [collapsed, setCollapsed] = useState(false);
+  // Mobile menu open or closed
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  // All my student data and functions come from this hook
   const {
-    students,                    // Array<Object> — all students
-    search,                      // string — current search text
-    setSearch,                   // function — update search
-    statusFilter,                // string — current filter
-    setStatusFilter,             // function — update filter
-    sortBy,                      // string — current sort field
-    setSortBy,                   // function — update sort
-    isAddModalOpen,              // boolean — add modal state
-    setIsAddModalOpen,           // function — toggle add modal
-    isEditModalOpen,             // boolean — edit modal state
-    setIsEditModalOpen,          // function — toggle edit modal
-    isDeleteModalOpen,           // boolean — delete modal state
-    setIsDeleteModalOpen,        // function — toggle delete modal
-    selectedStudent,             // Object | null — student being edited/deleted
-    setSelectedStudent,          // function — set selected student
-    handleAddStudent,            // function — add a new student
-    handleEditStudent,           // function — update existing student
-    handleDeleteStudent,         // function — remove a student
-    openEditModal,              // function — open edit modal with student
-    openDeleteModal,             // function — open delete modal with student
-    filteredSortedStudents,      // Array<Object> — processed student list
+    students,
+    search,
+    setSearch,
+    statusFilter,
+    setStatusFilter,
+    sortBy,
+    setSortBy,
+    isAddModalOpen,
+    setIsAddModalOpen,
+    isEditModalOpen,
+    setIsEditModalOpen,
+    isDeleteModalOpen,
+    setIsDeleteModalOpen,
+    selectedStudent,
+    setSelectedStudent,
+    handleAddStudent,
+    handleEditStudent,
+    handleDeleteStudent,
+    openEditModal,
+    openDeleteModal,
+    filteredSortedStudents,
   } = useStudents();
 
-  return (
-    <div className="app">
-      {/* Animated background with floating orbs */}
-      <AnimatedBackground />
+  // Count how many are enrolled
+  const enrolledCount = students.filter((s) => s.isEnrolled).length;
 
-      {/* Fixed glass navbar */}
-      <Navbar
-        onAddClick={() => setIsAddModalOpen(true)}
+  // Press 1 for Dashboard, 2 for Students 
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.target.tagName === "INPUT" || e.target.tagName === "SELECT") return;
+      if (e.key === "1") setActiveView("dashboard");
+      if (e.key === "2") setActiveView("students");
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
+  return (
+    <div className={`app ${collapsed ? "side-collapsed" : ""}`}>
+      <AppBackground />
+
+      {/* Left side menu */}
+      <DashboardMenu
+        activeView={activeView}
+        onNavigate={setActiveView}
         studentCount={students.length}
+        enrolledCount={enrolledCount}
+        collapsed={collapsed}
+        onToggleCollapse={() => setCollapsed((v) => !v)}
+        onAddClick={() => setIsAddModalOpen(true)}
+        mobileOpen={mobileOpen}
+        onCloseMobile={() => setMobileOpen(false)}
       />
 
-      {/* Main content area */}
-      <main className="main-content">
-        <motion.div
-          variants={pageVariants}
-          initial="hidden"
-          animate="visible"
+      <div className="app-main">
+        
+        <button
+          className="mobile-fab glass"
+          onClick={() => setMobileOpen(true)}
+          aria-label="Open menu"
         >
-          {/* Statistics cards showing totals */}
-          <StatsCards students={students} />
+          <LuMenu size={20} />
+        </button>
 
-          {/* Search bar and filter controls */}
-          <SearchFilter
-            search={search}
-            onSearchChange={setSearch}
-            statusFilter={statusFilter}
-            onStatusFilterChange={setStatusFilter}
-            sortBy={sortBy}
-            onSortChange={setSortBy}
-          />
+        {/* Main part of the page */}
+        <main className="main-content">
+          {/* Page heading with logo */}
+          <header className="page-header">
+            <img
+              src="/limkokwing-logo-cropped.png"
+              alt="Limkokwing University logo"
+              className="page-logo"
+            />
+            <div>
+              <h1 className="page-title">Student Management System</h1>
+            </div>
+          </header>
 
-          {/* Student records table */}
-          <StudentDashboard
-            students={filteredSortedStudents}
-            onEditClick={openEditModal}
-            onDeleteClick={openDeleteModal}
-          />
-        </motion.div>
-      </main>
+          <AnimatePresence mode="wait">
+            {activeView === "dashboard" ? (
+              <motion.div
+                key="dashboard"
+                variants={pageVariants}
+                initial="hidden"
+                animate="visible"
+                exit={{ opacity: 0, y: -12, transition: { duration: 0.2 } }}
+              >
+                <StudentStatsCards students={students} />
+                {/* Rich dashboard overview with View Students buttons */}
+                <DashboardOverview
+                  students={students}
+                  onViewStudents={() => setActiveView("students")}
+                  onAddClick={() => setIsAddModalOpen(true)}
+                />
+              </motion.div>
+            ) : (
+              <motion.div
+                key="students"
+                variants={pageVariants}
+                initial="hidden"
+                animate="visible"
+                exit={{ opacity: 0, y: -12, transition: { duration: 0.2 } }}
+              >
+                <StudentSearchFilter
+                  search={search}
+                  onSearchChange={setSearch}
+                  statusFilter={statusFilter}
+                  onStatusFilterChange={setStatusFilter}
+                  sortBy={sortBy}
+                  onSortChange={setSortBy}
+                />
+                <StudentDashboard
+                  students={filteredSortedStudents}
+                  onEditClick={openEditModal}
+                  onDeleteClick={openDeleteModal}
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </main>
 
-      {/* Footer */}
-      <footer className="app-footer">
-        <p>&copy; 2025 Student Management System — DIWA2110</p>
-      </footer>
+        <footer className="app-footer">
+          <p>&copy; 2026 Student Management System</p>
+        </footer>
+      </div>
 
-      {/* MODALS — CONDITIONALLY RENDERED */}
-      {/* Add Student Modal — shown when isAddModalOpen is true */}
-      <Modal
+    {/* Add student popup */}
+      <StudentModal
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
         title="Add New Student"
@@ -137,29 +170,29 @@ function App() {
           onSubmit={handleAddStudent}
           onCancel={() => setIsAddModalOpen(false)}
         />
-      </Modal>
+      </StudentModal>
 
-      {/* Edit Student Modal — shown when isEditModalOpen is true */}
-      <Modal
+      {/* Edit student popup */}
+      <StudentModal
         isOpen={isEditModalOpen}
         onClose={() => {
           setIsEditModalOpen(false);
-          setSelectedStudent(null); // Clear selection on close
+          setSelectedStudent(null);
         }}
         title="Edit Student"
       >
         <StudentForm
-          initialData={selectedStudent} // Pass student data to pre-fill form
+          initialData={selectedStudent}
           onSubmit={handleEditStudent}
           onCancel={() => {
             setIsEditModalOpen(false);
             setSelectedStudent(null);
           }}
         />
-      </Modal>
+      </StudentModal>
 
-      {/* Delete Confirmation Modal — shown when isDeleteModalOpen is true */}
-      <DeleteConfirmModal
+    {/* Delete confirm popup */}
+      <DeleteStudentModal
         isOpen={isDeleteModalOpen}
         student={selectedStudent}
         onConfirm={handleDeleteStudent}

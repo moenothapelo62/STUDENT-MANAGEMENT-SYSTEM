@@ -1,7 +1,8 @@
 import { motion } from "motion/react";
 import { LuTriangleAlert } from "react-icons/lu";
 
-function DeleteConfirmModal({ isOpen, student, onConfirm, onCancel }) {
+// This popup asks "are you sure?" before deleting.
+function DeleteStudentModal({ isOpen, student, onConfirm, onCancel }) {
   if (!isOpen || !student) return null;
 
   return (
@@ -32,8 +33,7 @@ function DeleteConfirmModal({ isOpen, student, onConfirm, onCancel }) {
           </motion.div>
           <h3 className="delete-title">Delete Student</h3>
           <p className="delete-text">
-            Are you sure you want to delete{" "}
-            <strong>{student.fullName}</strong>?
+            Are you sure you want to delete <strong>{student.fullName}</strong>?
           </p>
           <p className="warning-text">This action cannot be undone.</p>
           <div className="form-actions">
@@ -60,4 +60,4 @@ function DeleteConfirmModal({ isOpen, student, onConfirm, onCancel }) {
   );
 }
 
-export default DeleteConfirmModal;
+export default DeleteStudentModal;

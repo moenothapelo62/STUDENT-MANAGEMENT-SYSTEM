@@ -4,6 +4,7 @@ import { Toaster } from "sonner";
 import "./index.css";
 import App from "./App.jsx";
 
+// This starts my app. Toaster is for the small success messages.
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <App />

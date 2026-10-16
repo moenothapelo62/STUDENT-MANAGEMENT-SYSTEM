@@ -1,12 +1,8 @@
 import { useEffect, useRef } from "react";
 import { motion, animate } from "motion/react";
-import {
-  LuUsers,
-  LuUserCheck,
-  LuUserX,
-  LuCalendar,
-} from "react-icons/lu";
+import { LuUsers, LuUserCheck, LuUserX, LuCalendar } from "react-icons/lu";
 
+// Small number that counts up when the value changes, looks nice
 function AnimatedNumber({ value }) {
   const ref = useRef(null);
   const prevValue = useRef(0);
@@ -26,6 +22,7 @@ function AnimatedNumber({ value }) {
   return <span ref={ref}>0</span>;
 }
 
+// Cards slide in one by one (i is the card number)
 const cardVariants = {
   hidden: { opacity: 0, y: 20 },
   visible: (i) => ({
@@ -35,7 +32,9 @@ const cardVariants = {
   }),
 };
 
-function StatsCards({ students }) {
+// Four small cards: total, enrolled, not enrolled, average age
+function StudentStatsCards({ students }) {
+  // I used let here because the numbers change inside the loop
   let enrolled = 0;
   let ageTotal = 0;
   for (const s of students) {
@@ -78,4 +77,4 @@ function StatsCards({ students }) {
   );
 }
 
-export default StatsCards;
+export default StudentStatsCards;
