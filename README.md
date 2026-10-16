@@ -1,15 +1,13 @@
 STUDENT MANAGEMENT SYSTEM
- DIWA2110 – Web Application Development
+DIWA2110 – Web Application Development
 
-
-Student Name: THAPELO MOENO 
+Student Name: THAPELO MOENO
 Programme: Diploma in Business Information Technology  
 Institution: Limkokwing University of Creative Technology, Lesotho
 Student Number: 901020404
 Individual Assignment
 
-
- 1. Introduction
+1.  Introduction
 
 For my DIWA2110 Web Application Development assignment, I developed a Student Management System using React and JavaScript. I chose to build this system to practise what I have learned in web development and to understand how a website can be used to manage information.
 
@@ -51,7 +49,7 @@ GitHub:I uploaded my source code to GitHub so that the project could be stored o
 
 Netlify: I used Netlify to publish the application. This allowed me to open the website through a public link instead of running it only on my computer.
 
- 4. Features of the System
+4.  Features of the System
 
 4.1 Dashboard and Navigation
 
@@ -83,7 +81,7 @@ The application allows users to delete student records. Before the record is rem
 
 I included this step to reduce the chances of deleting a student by mistake. If the user cancels, the record remains in the table.
 
- 4.6 Searching, Filtering and Sorting
+4.6 Searching, Filtering and Sorting
 
 I added these features to make it easier to work with student records.
 
@@ -101,13 +99,13 @@ The system checks that all required fields have been completed, that the student
 
 If the user enters invalid information, an error message appears below the relevant field. The form cannot be submitted until the validation requirements are met.
 
- 4.8 Saving Student Information
+4.8 Saving Student Information
 
 The application uses local storage to save student records in the browser. This allows the records to remain available after the page is refreshed.
 
 However, local storage saves information on the current browser and device. It does not automatically share student records with other users or devices because the application does not use a shared database.
 
- 5. JavaScript Concepts Used
+5.  JavaScript Concepts Used
 
 During development, I applied several JavaScript concepts that I have studied in class.
 
@@ -123,7 +121,7 @@ I used different data types depending on the information being stored.
 
 This helped me organize the information and work with it more easily.
 
- 5.2 Variables
+5.2 Variables
 
 I used `const` for variables that did not need to be reassigned and `let` when a variable's value needed to change.
 
@@ -141,7 +139,7 @@ I used `if` statements to check whether form information was valid and to decide
 
 Conditional expressions were also used to display information depending on the application's current state. For example, the interface can display different labels or messages depending on the enrollment status or whether a validation error exists.
 
- 5.5 Array Methods
+5.5 Array Methods
 
 Array methods helped me work with student records.
 
@@ -152,7 +150,7 @@ Array methods helped me work with student records.
 
 These methods made it easier to manage the student list.
 
- 5.6 React Components and State
+5.6 React Components and State
 
 I divided the application into smaller React components instead of putting all the code into one large file. Each component handles a particular part of the system, such as the dashboard, student table, form or popup window.
 
@@ -169,23 +167,22 @@ The main structure is shown below.
 text
 STUDENT-MANAGEMENT-SYSTEM/
 └── src/
-    ├── App.jsx
-    ├── main.jsx
-    ├── components/
-    │   ├── AppBackground.jsx
-    │   ├── DashboardMenu.jsx
-    │   ├── DashboardOverview.jsx
-    │   ├── DeleteStudentModal.jsx
-    │   ├── StudentDashboard.jsx
-    │   ├── StudentForm.jsx
-    │   ├── StudentModal.jsx
-    │   ├── StudentsearcFilter.jsx
-    │   └── StudentStatsCards.jsx
-    ├── data/
-    │   └── initialStudent.js
-    └── hooks/
-        └── useStudents.js
-
+├── App.jsx
+├── main.jsx
+├── components/
+│ ├── AppBackground.jsx
+│ ├── DashboardMenu.jsx
+│ ├── DashboardOverview.jsx
+│ ├── DeleteStudentModal.jsx
+│ ├── StudentDashboard.jsx
+│ ├── StudentForm.jsx
+│ ├── StudentModal.jsx
+│ ├── StudentsearcFilter.jsx
+│ └── StudentStatsCards.jsx
+├── data/
+│ └── initialStudent.js
+└── hooks/
+└── useStudents.js
 
 The main files have different responsibilities:
 
@@ -205,28 +202,28 @@ The main files have different responsibilities:
 
 Separating these responsibilities made the project easier for me to follow while developing and testing it.
 
- 7. Testing and Results
+7.  Testing and Results
 
 After completing the main features, I tested the application in the browser to check whether the different operations worked correctly.
 
-| No. | Test | Expected result | Result |
-|---|---|---|---|
-| 1 | Add a student | The new record appears in the table | Passed |
-| 2 | Submit an empty or invalid form | Error messages appear and the record is not saved | Passed |
-| 3 | Edit a student | The updated information appears in the table | Passed |
-| 4 | Cancel editing | The original record remains unchanged | Passed |
-| 5 | Cancel deletion | The record remains in the table | Passed |
-| 6 | Confirm deletion | The selected record is removed | Passed |
-| 7 | Search by name or email | Matching records are displayed | Passed |
-| 8 | Filter and sort records | Records are displayed in the selected order or category | Passed |
-| 9 | Search for a nonexistent student | A message indicates that no students were found | Passed |
-| 10 | Refresh the page | Saved records remain available in the same browser | Passed |
-| 11 | Test navigation and mobile layout | The pages and menu work as expected | Passed |
-| 12 | Build the application | The production build completes without errors | Passed |
+| No. | Test                              | Expected result                                         | Result |
+| --- | --------------------------------- | ------------------------------------------------------- | ------ |
+| 1   | Add a student                     | The new record appears in the table                     | Passed |
+| 2   | Submit an empty or invalid form   | Error messages appear and the record is not saved       | Passed |
+| 3   | Edit a student                    | The updated information appears in the table            | Passed |
+| 4   | Cancel editing                    | The original record remains unchanged                   | Passed |
+| 5   | Cancel deletion                   | The record remains in the table                         | Passed |
+| 6   | Confirm deletion                  | The selected record is removed                          | Passed |
+| 7   | Search by name or email           | Matching records are displayed                          | Passed |
+| 8   | Filter and sort records           | Records are displayed in the selected order or category | Passed |
+| 9   | Search for a nonexistent student  | A message indicates that no students were found         | Passed |
+| 10  | Refresh the page                  | Saved records remain available in the same browser      | Passed |
+| 11  | Test navigation and mobile layout | The pages and menu work as expected                     | Passed |
+| 12  | Build the application             | The production build completes without errors           | Passed |
 
 I also deployed the project to Netlify and opened the live website. I tested the main operations, including adding, editing and deleting student records, and checked that form validation worked. The features worked as expected during my testing.
 
- 8. How to Run the Application
+8.  How to Run the Application
 
 To run the project locally, Node.js and npm must be installed, and the project files must be available on the computer.
 
@@ -236,14 +233,12 @@ bash
 npm install
 npm run dev
 
-
 Vite then displays a local development link, normally `http://localhost:5173`. Opening that link in a browser displays the application.
 
 To prepare the application for deployment, I can run:
 
 bash
 npm run build
-
 
 The generated production files are placed in the `dist` folder.
 
@@ -253,10 +248,10 @@ After working on the application, I uploaded the source code to GitHub and deplo
 
 The GitHub repository contains the project's source code, while Netlify provides the public link that can be opened in a browser.
 
-GitHub Repository:**  
+GitHub Repository:\*\*  
 https://github.com/moenothapelo62/STUDENT-MANAGEMENT-SYSTEM
 
-Live Website:**  
+Live Website:\*\*  
 https://soft-quokka-8d2b7c.netlify.app/
 
 I opened the deployed website and checked that the main student management features worked. This gave me experience in publishing a React application so that it could be accessed online.
@@ -271,11 +266,10 @@ Using local storage helped me understand how data can be preserved after refresh
 
 Finally, uploading the project to GitHub and deploying it through Netlify helped me understand how a project can move from development on a computer to a website that other people can access.
 
- 11. Conclusion
+11. Conclusion
 
 This assignment gave me an opportunity to practise the web development concepts I have learned in class. I developed a Student Management System that allows users to add, view, edit and delete student records, as well as search, filter and sort the information.
 
 Through the project, I improved my understanding of JavaScript, React components, state management, form validation and local storage. I also gained experience with GitHub and Netlify by storing my source code online and publishing the application.
 
 The system currently uses local storage rather than a shared database, but it demonstrates the main student management operations included in my project. Overall, completing this assignment helped me gain practical experience in building, testing and deploying a web application.
-
