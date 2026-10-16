@@ -92,9 +92,6 @@ function StudentForm({ initialData, onSubmit, onCancel }) {
 
   return (
     <form className="student-form" onSubmit={handleSubmit} noValidate>
-      {/* noValidate turns off the browser messages, I show my own below */}
-
-      {/* Name box */}
       <div className="form-group">
         <label htmlFor="fullName">Full Name</label>
         <div className="form-input-wrapper">
@@ -108,7 +105,6 @@ function StudentForm({ initialData, onSubmit, onCancel }) {
             placeholder="Enter full name"
           />
         </div>
-        {/* Show the error only if there is one */}
         <AnimatePresence>
           {errors.fullName && (
             <motion.span
@@ -123,7 +119,6 @@ function StudentForm({ initialData, onSubmit, onCancel }) {
         </AnimatePresence>
       </div>
 
-      {/* Age box */}
       <div className="form-group">
         <label htmlFor="age">Age</label>
         <div className="form-input-wrapper">
@@ -152,7 +147,6 @@ function StudentForm({ initialData, onSubmit, onCancel }) {
         </AnimatePresence>
       </div>
 
-      {/* Email box */}
       <div className="form-group">
         <label htmlFor="email">Email</label>
         <div className="form-input-wrapper">
@@ -180,7 +174,6 @@ function StudentForm({ initialData, onSubmit, onCancel }) {
         </AnimatePresence>
       </div>
 
-      {/* Course box */}
       <div className="form-group">
         <label htmlFor="course">Course</label>
         <div className="form-input-wrapper">
@@ -208,7 +201,6 @@ function StudentForm({ initialData, onSubmit, onCancel }) {
         </AnimatePresence>
       </div>
 
-      {/* Enrolled switch */}
       <div className="form-group">
         <label>Enrollment Status</label>
         <button
@@ -227,7 +219,6 @@ function StudentForm({ initialData, onSubmit, onCancel }) {
         </span>
       </div>
 
-      {/* Cancel and Save buttons */}
       <div className="form-actions">
         <motion.button
           type="button"
@@ -244,7 +235,6 @@ function StudentForm({ initialData, onSubmit, onCancel }) {
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
         >
-          {/* The button says Update when editing, Save when adding */}
           {initialData ? "Update Student" : "Save Student"}
         </motion.button>
       </div>

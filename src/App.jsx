@@ -75,7 +75,6 @@ function App() {
     <div className={`app ${collapsed ? "side-collapsed" : ""}`}>
       <AppBackground />
 
-      {/* Left side menu */}
       <DashboardMenu
         activeView={activeView}
         onNavigate={setActiveView}
@@ -98,9 +97,7 @@ function App() {
           <LuMenu size={20} />
         </button>
 
-        {/* Main part of the page */}
         <main className="main-content">
-          {/* Page heading with logo */}
           <header className="page-header">
             <img
               src="/limkokwing-logo-cropped.png"
@@ -122,7 +119,6 @@ function App() {
                 exit={{ opacity: 0, y: -12, transition: { duration: 0.2 } }}
               >
                 <StudentStatsCards students={students} />
-                {/* Rich dashboard overview with View Students buttons */}
                 <DashboardOverview
                   students={students}
                   onViewStudents={() => setActiveView("students")}
@@ -160,7 +156,6 @@ function App() {
         </footer>
       </div>
 
-    {/* Add student popup */}
       <StudentModal
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
@@ -172,7 +167,6 @@ function App() {
         />
       </StudentModal>
 
-      {/* Edit student popup */}
       <StudentModal
         isOpen={isEditModalOpen}
         onClose={() => {
@@ -191,7 +185,6 @@ function App() {
         />
       </StudentModal>
 
-    {/* Delete confirm popup */}
       <DeleteStudentModal
         isOpen={isDeleteModalOpen}
         student={selectedStudent}

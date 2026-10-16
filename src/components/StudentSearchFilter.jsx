@@ -1,10 +1,7 @@
-// Import three icon components from the "react-icons/lu" library
-// These are small SVG icons (search, filter, sort) used inside the UI
+// Importing three icon components from the "react-icons/lu" library
 import { LuSearch, LuFilter, LuArrowUpDown } from "react-icons/lu";
 
 // Create a React component called "StudentSearchFilter"
-// A component is a reusable piece of UI (like a search bar area)
-// The curly braces { } here destructure the "props" (data passed in from the parent)
 function StudentSearchFilter({
   search,                   
   onSearchChange,            
@@ -14,13 +11,9 @@ function StudentSearchFilter({
   onSortChange,              
 }) {
   return (
-    // A wrapper div with two CSS classes for styling
     <div className="search-filter glass">
-
       <div className="input-wrapper">
         <LuSearch className="input-icon" size={18} />
-        
-        // Text input where user types to search students 
         <input
           type="text"                                       
           className="search-input"                          
@@ -30,7 +23,6 @@ function StudentSearchFilter({
         />
       </div>
 
-      // STATUS FILTER DROPDOWN 
       <div className="input-wrapper">
         <LuFilter className="input-icon" size={18} />
         
@@ -45,7 +37,6 @@ function StudentSearchFilter({
         </select>
       </div>
 
-     // SORT DROPDOWN 
       <div className="input-wrapper">
         <LuArrowUpDown className="input-icon" size={18} />
         

@@ -54,12 +54,8 @@ function DashboardMenu({
 
   const menuBody = (
     <>
-      // Logo and heading live in the top page header now, not here 
-
-      // Menu small heading 
       {!collapsed && <p className="side-label">Menu</p>}
 
-      // My menu buttons 
       <nav className="side-nav">
         {items.map((item) => {
           const active = activeView === item.id;
@@ -99,7 +95,6 @@ function DashboardMenu({
         })}
       </nav>
 
-      // Add student button 
       <div className="side-action">
         <motion.button
           className={`side-add ${collapsed ? "is-collapsed" : ""}`}
@@ -113,7 +108,6 @@ function DashboardMenu({
         </motion.button>
       </div>
 
-    // Bottom box with enrolled % 
       <div className={`side-footer ${collapsed ? "is-collapsed" : ""}`}>
         <div className="ring-wrap">
           <svg viewBox="0 0 56 56" className="ring-svg">
@@ -141,7 +135,6 @@ function DashboardMenu({
         )}
       </div>
 
-      // Small button to make the menu small or big 
       <button
         className="side-collapse"
         onClick={onToggleCollapse}
@@ -159,7 +152,6 @@ function DashboardMenu({
 
   return (
     <>
-      // Big menu on computer 
       <motion.aside
         className={`sidebar glass ${collapsed ? "collapsed" : ""}`}
         initial={{ x: -90, opacity: 0 }}
@@ -169,7 +161,6 @@ function DashboardMenu({
         {menuBody}
       </motion.aside>
 
-      //  Slide menu on phone 
       <AnimatePresence>
         {mobileOpen && (
           <>

@@ -3,7 +3,6 @@ import { motion } from "motion/react";
 export default function AppBackground() {
   return (
     <div className="animated-bg" aria-hidden="true">
-      /// Three soft lights that move slowly 
       <motion.div
         className="orb orb-1"
         animate={{ x: [0, 120, -60, 0], y: [0, -100, 80, 0] }}

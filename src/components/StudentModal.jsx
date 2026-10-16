@@ -1,8 +1,7 @@
 import { motion, AnimatePresence } from "motion/react";
 import { LuX } from "react-icons/lu";
 
-// My normal popup box. I use it for Add and Edit.
-// isOpen decides if it shows, onClose closes it when you click outside.
+// My normal popup box
 function StudentModal({ isOpen, onClose, title, children }) {
   return (
     <AnimatePresence>

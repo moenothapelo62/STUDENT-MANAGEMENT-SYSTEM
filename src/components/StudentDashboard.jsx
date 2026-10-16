@@ -60,7 +60,6 @@ function StudentDashboard({ students, onEditClick, onDeleteClick }) {
             </tr>
           </thead>
           <tbody>
-            {/* map over the array to make one row per student */}
             <AnimatePresence mode="popLayout">
               {students.map((student) => (
                 <motion.tr
@@ -124,7 +123,6 @@ function StudentDashboard({ students, onEditClick, onDeleteClick }) {
           </tbody>
         </table>
 
-        {/* Message when the search finds nothing */}
         {students.length === 0 && (
           <motion.div
             className="empty-state"

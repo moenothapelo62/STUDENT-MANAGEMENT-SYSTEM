@@ -4,12 +4,12 @@ const initialStudents = [
  
   // Each object represents ONE student with their details
   {
-    id: 1,                                              // Unique number to identify this student
-    fullName: "Thabo Molefe",                           // Student's full name (text/string)
-    age: 21,                                            // Student's age (number)
-    email: "thabomolefe@gmail.com",                     // Student's email address
-    course: "Diploma in Information Technology",        // Course the student is studying
-    isEnrolled: true,                                   // true = student is currently enrolled
+    id: 1,                                              
+    fullName: "Thabo Molefe",                           
+    age: 21,                                            
+    email: "thabomolefe@gmail.com",                     
+    course: "Diploma in Information Technology",        
+    isEnrolled: true,                                   
   },
 
   // Second student object
@@ -33,5 +33,4 @@ const initialStudents = [
   },
 ];
 
-// "export default" means this is the main thing being shared from this file
 export default initialStudents;
